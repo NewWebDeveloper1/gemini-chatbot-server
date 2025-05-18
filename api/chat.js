@@ -6,6 +6,8 @@ const allowedOrigins = [
 ];
 
 const handler = async (req, res) => {
+  console.log("Request body : ", req.body);
+  console.log("Request Method : ", req.method);
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
@@ -28,13 +30,23 @@ const handler = async (req, res) => {
 
   try {
     const { message } = req.body;
+    console.log("Parsed message : ", message);
 
     // if message not provided
     if (!message) {
       return res.status(400).json({ error: "No Message provided" });
     }
 
+    if (!Array.isArray(message)) {
+      return res.status(400).json({ error: "Message must be an array" });
+    }
+
     const GEMINI_API_KEY = process.env.API_KEY;
+
+    if (!API_KEY) {
+      console.error("Missing API_KEY");
+      return res.status(500).json({ error: "Missing API key" });
+    }
 
     const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -46,6 +58,11 @@ const handler = async (req, res) => {
     });
 
     const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Gemini error response:", data);
+      return res.status(500).json({ error: data.error || "Gemini API error" });
+    }
 
     res.status(200).json({ reply: data });
   } catch (error) {
