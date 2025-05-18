@@ -24,12 +24,12 @@ const handler = async (req, res) => {
     return res.status(405).json({ error: "Only POST requests allowed" });
   }
 
+  const { message } = req.body;
+
   // if message not provided
-  if (!req.message) {
+  if (!message) {
     return res.status(400).json({ error: "No Message provided" });
   }
-
-  const { message } = req.body;
 
   const GEMINI_API_KEY = process.env.API_KEY;
 
