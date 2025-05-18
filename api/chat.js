@@ -5,7 +5,7 @@ const allowedOrigins = [
   "https://gemini-chatbot-replica.vercel.app",
 ];
 
-const handler = async (req, res) => {
+export default async function handler(req, res) {
   console.log("Request body : ", req.body);
   console.log("Request Method : ", req.method);
   const origin = req.headers.origin;
@@ -72,6 +72,4 @@ const handler = async (req, res) => {
     console.log("Error : ", error);
     res.status(500).json({ error: "Failed to get response from GEMINI AI" });
   }
-};
-
-export default handler;
+}
