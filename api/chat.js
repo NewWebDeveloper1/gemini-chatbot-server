@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
   // Handle pre-flight requests
   if (req.method === "OPTIONS") {
-    res.status(200).end();
+    return res.status(200).end();
   }
 
   // Handle if not POST
@@ -52,15 +52,15 @@ export default async function handler(req, res) {
 
     const response = await axios.post(
       GEMINI_API_URL,
+      { contents: message },
       {
         headers: {
           "Content-Type": "application/json",
         },
-      },
-      { contents: message }
+      }
     );
 
-    const data = await response.json();
+    const data = await response.data;
 
     if (!response.ok) {
       console.error("Gemini error response:", data);
