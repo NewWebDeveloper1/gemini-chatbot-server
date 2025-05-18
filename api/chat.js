@@ -50,12 +50,15 @@ const handler = async (req, res) => {
 
     const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-    const response = await axios.post(GEMINI_API_URL, {
-      headers: {
-        "Content-Type": "application/json",
+    const response = await axios.post(
+      GEMINI_API_URL,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-      body: JSON.stringify({ contents: message }),
-    });
+      { contents: message }
+    );
 
     const data = await response.json();
 
