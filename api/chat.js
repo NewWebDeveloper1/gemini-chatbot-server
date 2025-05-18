@@ -11,12 +11,22 @@ const handler = async (req, res) => {
   }
 
   // Allow CORS
-  res.setHeader("Access-Control-Allow-Methods", "POST");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-type");
+
+  // Handle pre-flight requests
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+  }
 
   // Handle if not POST
   if (req.method != "POST") {
     return res.status(405).json({ error: "Only POST requests allowed" });
+  }
+
+  // if message not provided
+  if (!req.message) {
+    return res.status(400).json({ error: "No Message provided" });
   }
 
   const { message } = req.body;
