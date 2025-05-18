@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const allowedOrigins = [
   "http://127.0.0.1:5500",
   "https://gemini-chatbot-replica.vercel.app",
@@ -24,20 +26,19 @@ const handler = async (req, res) => {
     return res.status(405).json({ error: "Only POST requests allowed" });
   }
 
-  const { message } = req.body;
-
-  // if message not provided
-  if (!message) {
-    return res.status(400).json({ error: "No Message provided" });
-  }
-
-  const GEMINI_API_KEY = process.env.API_KEY;
-
-  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-
   try {
-    const response = await fetch(GEMINI_API_URL, {
-      method: "POST",
+    const { message } = req.body;
+
+    // if message not provided
+    if (!message) {
+      return res.status(400).json({ error: "No Message provided" });
+    }
+
+    const GEMINI_API_KEY = process.env.API_KEY;
+
+    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const response = await axios.post(GEMINI_API_URL, {
       headers: {
         "Content-Type": "application/json",
       },
